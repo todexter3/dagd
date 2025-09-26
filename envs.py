@@ -220,7 +220,9 @@ class MarketEnv:
         if side == 'buy':
             for px, vol in [(row['askPrice1'], row['askVolume1']),
                             (row['askPrice2'], row['askVolume2']),
-                            (row['askPrice3'], row['askVolume3'])]:
+                            (row['askPrice3'], row['askVolume3']),
+                            (row['askPrice4'], row['askVolume4']),
+                            (row['askPrice5'], row['askVolume5'])]:
                 take = int(min(size - filled, max(0, vol)))
                 if take <= 0: continue
                 filled += take

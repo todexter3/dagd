@@ -24,10 +24,7 @@ torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
 
-def train_system(data_path: str = "data/AA_Comdty_cpu",
-                 n_episodes: int = 500,
-                 save_interval: int = 50,
-                 side: str = 'buy') -> Dict:
+def train_system(args) -> Dict:
 
     config = Config(side=args.side)
     if argss() is not None:
@@ -36,7 +33,7 @@ def train_system(data_path: str = "data/AA_Comdty_cpu",
         config.gamma = args.gamma
         config.n_epochs_per_update = args.n_epochs_per_update
         config.batch_size = args.batch_size
-        config.buffer_size = args.buffer_size
+        config.buffer_size = args.buffer
         config.clip_ratio = args.clip_range
         config.value_loss_coef = args.vf_coef
         config.entropy_beta = args.ent_coef
@@ -47,7 +44,7 @@ def train_system(data_path: str = "data/AA_Comdty_cpu",
 
     # --- MODIFICATION START ---
     # 1. Create a unique name for the experiment directory
-    data_folder_name = os.path.basename(data_path)
+    data_folder_name = os.path.basename(args.data_path)
     experiment_name = (f"{data_folder_name}_"
                        f"side_{config.side}_"
                        f"inv{config.initial_inventory}_"
@@ -81,9 +78,9 @@ def train_system(data_path: str = "data/AA_Comdty_cpu",
     # --- MODIFICATION END ---
 
     print(f"Loading data from {args.data_path}...")
-    train_data = pd.read_csv(os.path.join(data_path, "train.csv"))
-    valid_data = pd.read_csv(os.path.join(data_path, "valid.csv"))
-    test_data  = pd.read_csv(os.path.join(data_path, "test.csv"))
+    train_data = pd.read_csv(os.path.join(args.data_path, "train.csv"))
+    valid_data = pd.read_csv(os.path.join(args.data_path, "valid.csv"))
+    test_data  = pd.read_csv(os.path.join(args.data_path, "test.csv"))
     print(f"Train: {len(train_data):,} | Valid: {len(valid_data):,} | Test: {len(test_data):,}")
 
     train_env = MarketEnv(train_data, config, mode='train', reward_type=args.reward_type)
@@ -159,7 +156,7 @@ def train_system(data_path: str = "data/AA_Comdty_cpu",
             else:
                 patience_counter += 1
 
-            print(f"\nEpisode {ep+1}/{n_episodes}")
+            print(f"\nEpisode {ep+1}/{args.n_episodes}")
             print(f"  Train - Reward: {np.mean(history['train_rewards'][-25:]):.1f} | "
                   f"Completion: {np.mean(history['train_completion'][-25:])*100:.1f}% | "
                   f"Cost: {np.mean(history['train_costs'][-25:]):.1f} bps")
@@ -167,7 +164,7 @@ def train_system(data_path: str = "data/AA_Comdty_cpu",
                   f"Cost: {np.mean(v_costs) if v_costs else 0:.1f} bps")
             print(f"  Learning - LR: {agent.scheduler.get_last_lr()[0]:.6f}")
 
-            logging.info(f"\nEpisode {ep+1}/{n_episodes}")
+            logging.info(f"\nEpisode {ep+1}/{args.n_episodes}")
             logging.info(f"  Train - Reward: {np.mean(history['train_rewards'][-25:]):.1f} | "
                   f"Completion: {np.mean(history['train_completion'][-25:])*100:.1f}% | "
                   f"Cost: {np.mean(history['train_costs'][-25:]):.1f} bps")

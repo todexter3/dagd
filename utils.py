@@ -1,6 +1,11 @@
+
+import math
+import numpy as np
+import pandas as pd
+from typing import Dict
 from config import Config
 import argparse
-import numpy as np
+
 
 def str2bool(v):
     if isinstance(v, bool):
@@ -20,22 +25,22 @@ def argss():
     prs.add_argument("--n_episodes", type=int, default=1500, help="Number of episodes to train.")
     prs.add_argument("--save_interval", type=int, default=50, help="Interval (in episodes) for saving model checkpoints.")
 
-    prs.add_argument('-reward', dest='reward_type', type=str, default="cpu", required=False, help="Reward function: cpu or gpu.\n")
+    prs.add_argument('--reward', dest='reward_type', type=str, default="cpu", required=False, help="Reward function: cpu or gpu.\n")
     prs.add_argument('--initial_inventory', type=int, default=1000, required=False, help='Initial inventory to execute.')
     prs.add_argument('--time_horizon', type=int, default=500, required=False, help='Time horizon for execution.')
 
-    prs.add_argument("-a", dest="lr", type=float,default=0.0003, required=False, help="Alpha learning rate.\n")
-    prs.add_argument("-gamma", dest="gamma", type=float,default=0.99, required=False, help="discount factor.\n")
-    prs.add_argument("-ep", dest="n_epochs_per_update", type=int, default=10, required=False, help="acceleration of t.\n")
-    prs.add_argument("-batch", dest="batch_size", type=int, default=128, required=False, help="batch_size. \n")
-    prs.add_argument("-buffer", dest="buffer", type=int, default=2048, required=False, help="batch_size. \n")
-    prs.add_argument("-ls", dest="learning_starts", type=int, default=100, required=False, help="batch_size. \n")
-    prs.add_argument("-cr", dest="clip_range", type=float, default=0.2, required=False, help="clip_range. \n")
-    prs.add_argument("-vfc", dest="vf_coef", type=float, default=0.5, required=False, help="vf coef. \n")
-    prs.add_argument("-efc", dest="ent_coef", type=float, default=0.0, required=False, help="ent coef. \n")
+    prs.add_argument("--a", dest="lr", type=float,default=0.0003, required=False, help="Alpha learning rate.\n")
+    prs.add_argument("--gamma", dest="gamma", type=float,default=0.99, required=False, help="discount factor.\n")
+    prs.add_argument("--ep", dest="n_epochs_per_update", type=int, default=10, required=False, help="acceleration of t.\n")
+    prs.add_argument("--batch", dest="batch_size", type=int, default=128, required=False, help="batch_size. \n")
+    prs.add_argument("--buffer", dest="buffer", type=int, default=2048, required=False, help="batch_size. \n")
+    prs.add_argument("--ls", dest="learning_starts", type=int, default=100, required=False, help="batch_size. \n")
+    prs.add_argument("--cr", dest="clip_range", type=float, default=0.2, required=False, help="clip_range. \n")
+    prs.add_argument("--vfc", dest="vf_coef", type=float, default=0.5, required=False, help="vf coef. \n")
+    prs.add_argument("--efc", dest="ent_coef", type=float, default=0.0, required=False, help="ent coef. \n")
     
-    prs.add_argument("-actnorm", dest="act_norm", type=str2bool, default=True, required=False, help="Whether to normalize actions.\n")
-    prs.add_argument("-statenorm", dest="state_norm", type=str2bool, default=True, required=False, help="Whether to normalize states.\n")
+    prs.add_argument("--actnorm", dest="act_norm", type=str2bool, default=True, required=False, help="Whether to normalize actions.\n")
+    prs.add_argument("--statenorm", dest="state_norm", type=str2bool, default=True, required=False, help="Whether to normalize states.\n")
     
     args = prs.parse_args()
     return args

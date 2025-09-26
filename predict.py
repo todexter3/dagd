@@ -30,7 +30,7 @@ def predict(args):
         raise FileNotFoundError(f"Model file not found at {args.model_path}\n"
                                 f"Please ensure the training parameters match or provide the correct path using --model_path.")
 
-    # 回测的数据
+    # 回测数据
     print(f"Loading backtest data from: {args.backtest_data_path}")
     if not os.path.exists(args.backtest_data_path):
         raise FileNotFoundError(f"Data file not found at {args.backtest_data_path}")
@@ -44,9 +44,9 @@ def predict(args):
     # 初始化环境和 Agent
     test_env = MarketEnv(test_data, config, mode='test')
     agent = PPOAgent(config)
-    agent.load(args.model_path) # 加载训练好的模型
+    agent.load(args.model_path) 
     agent.network.to(device)
-    agent.network.eval() # 设置为评估模式
+    agent.network.eval() 
 
     print("\n" + "="*60)
     print("STARTING PREDICTION / BACKTEST")

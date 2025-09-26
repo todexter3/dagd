@@ -90,7 +90,7 @@ class PPOAgent:
         next_state = np.nan_to_num(next_state, nan=0.0, posinf=1e6, neginf=-1e6)
         self.buffer.append({
             'state': state,
-            'action': action,      
+            'action': action,      # [size, bps, post]
             'reward': reward,
             'next_state': next_state,
             'done': done,
